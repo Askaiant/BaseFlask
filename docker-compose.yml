@@ -1,0 +1,40 @@
+version: '3.8'
+
+services:
+  web:
+    build: .
+    command: python manager.py runserver --debug
+    depends_on:
+      - db
+    volumes:
+      - ./:/usr/src/app/
+    ports:
+      - "5000:5000"
+    env_file:
+      - ./.env
+    restart: always
+
+  db:
+    image: postgres:latest
+    volumes:
+      - postgres_data:/var/lib/postgresql/data/
+    ports:
+      - "5432:5432"
+    environment:
+      - POSTGRES_USER=postgres
+      - POSTGRES_PASSWORD=postgres
+      - POSTGRES_DB=justclassics
+
+  swagger-ui:
+    image: swaggerapi/swagger-ui:latest
+    ports:
+      - "8081:8080"
+    volumes:
+      - ./swagger/swagger.json:/swagger.json
+    environment:
+      - SWAGGER_JSON=http://web:5000/api/v2/swagger.json
+      - API_URL=http://localhost:5000/api/v2/swagger.json
+
+
+volumes:
+  postgres_data:
