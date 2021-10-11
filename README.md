@@ -1,4 +1,4 @@
-# FlaslBase
+# FlaskBase
 Basic flask rest api with user authentication
 
 ## Get started
